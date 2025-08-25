@@ -1,0 +1,25 @@
+module gesture_to_word (
+    input  [3:0] gesture_code,  // from FSM
+    output reg [7:0] chars [5:0] // 6 ASCII chars for HEX5..HEX0
+);
+    always @(*) begin
+        case (gesture_code)
+            4'd0: begin chars[5]=" "; chars[4]=" "; chars[3]=" "; chars[2]="Y"; chars[1]="E"; chars[0]="S"; end
+            4'd1: begin chars[5]=" "; chars[4]=" "; chars[3]=" "; chars[2]=" "; chars[1]="N"; chars[0]="O"; end
+            4'd2: begin chars[5]=" "; chars[4]=" "; chars[3]=" "; chars[2]="H"; chars[1]="E"; chars[0]="L"; end
+            4'd3: begin chars[5]=" "; chars[4]=" "; chars[3]="W"; chars[2]="A"; chars[1]="T"; chars[0]="R"; end
+            4'd4: begin chars[5]=" "; chars[4]=" "; chars[3]=" "; chars[2]="F"; chars[1]="O"; chars[0]="D"; end
+            4'd5: begin chars[5]=" "; chars[4]=" "; chars[3]="E"; chars[2]="M"; chars[1]="E"; chars[0]="R"; end
+            4'd6: begin chars[5]=" "; chars[4]=" "; chars[3]=" "; chars[2]="P"; chars[1]="A"; chars[0]="I"; end
+            4'd7: begin chars[5]=" "; chars[4]=" "; chars[3]=" "; chars[2]="S"; chars[1]="T"; chars[0]="O"; end
+            4'd8: begin chars[5]=" "; chars[4]=" "; chars[3]=" "; chars[2]=" "; chars[1]="G"; chars[0]="O"; end
+            4'd9: begin chars[5]=" "; chars[4]=" "; chars[3]=" "; chars[2]="H"; chars[1]="O"; chars[0]="M"; end
+            4'd10:begin chars[5]=" "; chars[4]=" "; chars[3]=" "; chars[2]="C"; chars[1]="A"; chars[0]="L"; end
+            4'd11:begin chars[5]=" "; chars[4]=" "; chars[3]=" "; chars[2]="D"; chars[1]="R"; chars[0]=" "; end
+            4'd12:begin chars[5]=" "; chars[4]=" "; chars[3]=" "; chars[2]="T"; chars[1]="H"; chars[0]="X"; end
+            4'd13:begin chars[5]=" "; chars[4]=" "; chars[3]="S"; chars[2]="O"; chars[1]="R"; chars[0]="Y"; end
+            4'd14:begin chars[5]=" "; chars[4]=" "; chars[3]=" "; chars[2]="O"; chars[1]="K"; chars[0]=" "; end
+            default:begin chars[5]=" "; chars[4]=" "; chars[3]=" "; chars[2]=" "; chars[1]=" "; chars[0]=" "; end
+        endcase
+    end
+endmodule

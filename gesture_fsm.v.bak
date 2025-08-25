@@ -1,0 +1,70 @@
+module gesture_fsm (
+    input clk,                // from clock divider
+    input rst,                // reset button (active high)
+    input [3:0] sensor_in,    // mock input from switches
+    output reg [3:0] gesture  // gesture output code
+);
+
+    // State encoding
+    typedef enum reg [2:0] {
+        S_IDLE   = 3'b000,
+        S_CHECK  = 3'b001,
+        S_YES    = 3'b010,
+        S_NO     = 3'b011,
+        S_HELP   = 3'b100,
+        S_WATER  = 3'b101
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // Sequential block (state transition)
+    always @(posedge clk or posedge rst) begin
+        if (rst)
+            current_state <= S_IDLE;
+        else
+            current_state <= next_state;
+    end
+
+    // Combinational block (next state logic)
+    always @(*) begin
+        case (current_state)
+            S_IDLE: begin
+                if (sensor_in != 4'b0000)
+                    next_state = S_CHECK;
+                else
+                    next_state = S_IDLE;
+            end
+
+            S_CHECK: begin
+                case (sensor_in)
+                    4'b1001: next_state = S_YES;    // Yes
+                    4'b0001: next_state = S_NO;     // No
+                    4'b1010: next_state = S_HELP;   // Help
+                    4'b1100: next_state = S_WATER;  // Water
+                    default: next_state = S_IDLE;
+                endcase
+            end
+
+            S_YES, S_NO, S_HELP, S_WATER: begin
+                if (sensor_in == 4'b0000)
+                    next_state = S_IDLE;
+                else
+                    next_state = current_state; // hold until released
+            end
+
+            default: next_state = S_IDLE;
+        endcase
+    end
+
+    // Output logic (Moore style → depends only on state)
+    always @(*) begin
+        case (current_state)
+            S_YES:   gesture = 4'b0001;
+            S_NO:    gesture = 4'b0010;
+            S_HELP:  gesture = 4'b0100;
+            S_WATER: gesture = 4'b1000;
+            default: gesture = 4'b0000;  // IDLE or unknown
+        endcase
+    end
+
+endmodule

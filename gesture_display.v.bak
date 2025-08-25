@@ -1,0 +1,17 @@
+module gesture_display (
+    input  [3:0] gesture_code,
+    output [6:0] HEX0, HEX1, HEX2, HEX3, HEX4, HEX5
+);
+    wire [7:0] chars [5:0];
+
+    // Decode gesture → 6 chars
+    gesture_to_word u1(.gesture_code(gesture_code), .chars(chars));
+
+    // Convert chars → 7-seg
+    char_to_7seg d0(.char(chars[0]), .seg(HEX0));
+    char_to_7seg d1(.char(chars[1]), .seg(HEX1));
+    char_to_7seg d2(.char(chars[2]), .seg(HEX2));
+    char_to_7seg d3(.char(chars[3]), .seg(HEX3));
+    char_to_7seg d4(.char(chars[4]), .seg(HEX4));
+    char_to_7seg d5(.char(chars[5]), .seg(HEX5));
+endmodule

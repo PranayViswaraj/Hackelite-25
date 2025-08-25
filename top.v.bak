@@ -1,0 +1,25 @@
+module top (
+    input clk_50mhz,  // from board PIN_N14
+    input rst_n,      // KEY0 (active-low reset)
+    input ip,         // SW0 input
+    output det        // LED0 output
+);
+
+    wire slow_clk;
+
+    // Instantiate clock divider
+    clock_divider u1 (
+        .clk_in(clk_50mhz),
+        .rst_n(rst_n),
+        .clk_out(slow_clk)   // ~1 Hz
+    );
+
+    // Instantiate FSM
+    fsm u2 (
+        .ip(ip),
+        .clk(slow_clk),
+        .rst(rst_n),
+        .det(det)
+    );
+
+endmodule
